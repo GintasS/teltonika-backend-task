@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ToDoApp.Domain.Entities;
 
 namespace ToDoApp.Database
 {
-    public class TodoAppContenxt : DbContext
+    public class TodoAppContext : DbContext
     {
         public DbSet<ToDoSingleItemEntity> ToDoSingleItemEntities { get; set; }
         public DbSet<TodoListEntity> TodoListEntities { get; set; }
 
-        public TodoAppContenxt(DbContextOptions<TodoAppContenxt> options)
+        public TodoAppContext(DbContextOptions<TodoAppContext> options)
             : base(options)
         {
+            DataSeeder.InsertTodoData(this);
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
