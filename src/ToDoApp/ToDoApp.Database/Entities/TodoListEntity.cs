@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace ToDoApp.Domain.Entities
+namespace ToDoApp.Database.Entities
 {
-    public class TodoListEntity
+    public class ToDoListEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<ToDoSingleItemEntity> ToDoSingleItemEntities { get; set; }
+        public virtual ICollection<ToDoItemEntity> ToDoItemEntities { get; set; }
     }
 }
