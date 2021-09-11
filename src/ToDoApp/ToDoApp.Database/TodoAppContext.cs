@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using ToDoApp.Database.Entities;
 
 namespace ToDoApp.Database
@@ -19,18 +20,19 @@ namespace ToDoApp.Database
 
             modelBuilder.Entity<ToDoItemEntity>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
                 entity.HasOne(d => d.ToDoListEntity)
                     .WithMany(p => p.ToDoItemEntities);
 
             });
 
-            modelBuilder.Entity<ToDoListEntity>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-            });
+            modelBuilder.Entity<UserEntity>(entity =>
+                    entity.Property(e => e.Role)
+                        .HasMaxLength(50)
+                        .HasConversion(
+                            v => v.ToString(),
+                            v => (Role)Enum.Parse(typeof(Role), v))
+                        .IsUnicode(false)
+            );
         }
     }
 }
