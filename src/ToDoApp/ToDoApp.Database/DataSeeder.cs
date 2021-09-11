@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ToDoApp.Domain.Entities;
+﻿using ToDoApp.Domain.Entities;
 
 namespace ToDoApp.Database
 {
     public class DataSeeder
     {
-        public static void InsertTodoData(TodoAppContenxt context)
+        public static void InsertTodoData(TodoAppContext context)
         {
-
             context.Database.EnsureCreated();
 
             // Add a single To do list.
@@ -69,6 +65,7 @@ namespace ToDoApp.Database
             context.ToDoSingleItemEntities.Add(entry5);
 
             context.SaveChanges();
+            
         }
     }
 }
