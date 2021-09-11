@@ -1,8 +1,8 @@
 ﻿namespace ToDoApp.Core.Models.Responses
 {
-    public class CreateToDoListResponseModel
+    public class UpdateToDoItemResponse : ToDoItem
     {
+        public int ListId { get; set; }
         public int Id { get; set; }
-        public string Name { get; set; }
     }
 }
