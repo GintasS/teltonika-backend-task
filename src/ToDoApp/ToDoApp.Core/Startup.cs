@@ -28,9 +28,10 @@ namespace ToDoApp.Core
             );
 
             services.AddDbContext<TodoAppContext>(
-                options => options.UseMySQL("server=localhost;database=library;user=root;password=admin"));
+                options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IToDoListService, ToDoListService>();
+            services.AddScoped<IToDoItemService, ToDoItemService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
