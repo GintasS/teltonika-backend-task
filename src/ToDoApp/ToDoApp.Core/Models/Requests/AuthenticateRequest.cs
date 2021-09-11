@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Core.Interfaces
+﻿namespace ToDoApp.Core.Requests
 {
     public class AuthenticateRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Core.Interfaces
+﻿namespace ToDoApp.Core.Responses
 {
     public class AuthenticateResponse
     {
