@@ -5,6 +5,6 @@ namespace ToDoApp.Core.Interfaces
 {
     public interface IToDoListService
     {
-        public CreateToDoListResponseModel CreateEmptyTodoList(CreateToDoListRequestModel requestModel);
+        public CreateToDoListResponse CreateEmptyTodoList(CreateToDoListRequest requestModel);
     }
 }
