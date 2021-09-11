@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
-using ToDoApp.Database;
 
 namespace ToDoApp.Core.Controllers
 {
@@ -10,20 +9,17 @@ namespace ToDoApp.Core.Controllers
     public class ToDoListController : ControllerBase
     {
         private readonly IToDoListService _toDoListService;
-        private readonly TodoAppContext _context;
 
-        public ToDoListController(IToDoListService toDoListService, TodoAppContext context)
+        public ToDoListController(IToDoListService toDoListService)
         {
             _toDoListService = toDoListService;
-            _context = context;
         }
 
         [Route("/todo-lists")]
         [HttpPost]
-        public IActionResult CreateEmptyTodoList(CreateToDoListRequestModel createRequestModel)
+        public IActionResult CreateEmptyTodoList(CreateToDoListRequest createRequestModel)
         {
             var response = _toDoListService.CreateEmptyTodoList(createRequestModel);
-
             return Ok(response);
         }
     }
