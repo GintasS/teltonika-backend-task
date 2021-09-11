@@ -7,6 +7,6 @@ namespace ToDoApp.Core.Configuration
 {
     public class ApplicationSettings
     {
-
+        public string MySQLConnectionString { get; set; }
     }
 }
