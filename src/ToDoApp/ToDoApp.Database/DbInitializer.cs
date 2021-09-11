@@ -60,14 +60,14 @@ namespace ToDoApp.Database
             {
                 new UserEntity
                 {
-                    Username = "admin",
-                    Password = "admin",
+                    Email = "svedgintas@gmail.com",
+                    Password = "123456789012345",
                     Role = Role.Admin
                 },
                 new UserEntity
                 {
-                    Username = "user",
-                    Password = "user",
+                    Email = "svedgintas123@gmail.com",
+                    Password = "123456789012345",
                     Role = Role.User
                 },
             };
