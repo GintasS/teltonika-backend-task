@@ -2,7 +2,7 @@
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
-using ToDoApp.Domain.Entities;
+using ToDoApp.Database.Entities;
 
 namespace ToDoApp.Core.Services
 {
@@ -15,21 +15,20 @@ namespace ToDoApp.Core.Services
             _context = context;
         }
 
-        public CreateToDoListResponseModel CreateEmptyTodoList(CreateToDoListRequestModel requestModel)
+        public CreateToDoListResponse CreateEmptyTodoList(CreateToDoListRequest requestModel)
         {
-            var createdEntity = _context.TodoListEntities.Add(new TodoListEntity()
+            var createdEntity = _context.ToDoListEntities.Add(new ToDoListEntity
             {
                 Name = requestModel.Name
             }).Entity;
 
             _context.SaveChanges();
 
-            return new CreateToDoListResponseModel
+            return new CreateToDoListResponse
             {
                 Id = createdEntity.Id,
                 Name = createdEntity.Name
             };
-
         }
     }
 }
