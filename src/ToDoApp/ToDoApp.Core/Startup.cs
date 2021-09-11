@@ -1,9 +1,13 @@
+using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using ToDoApp.Core.Configuration;
+using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Services;
 using ToDoApp.Database;
@@ -27,11 +31,22 @@ namespace ToDoApp.Core
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
 
-            services.AddDbContext<TodoAppContext>(
-                options => options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddCors();
             services.AddScoped<IToDoListService, ToDoListService>();
             services.AddScoped<IToDoItemService, ToDoItemService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
+
+            var configuration = InitializeConfigurationSettings();
+            var applicationSettings = configuration.GetSection("ApplicationSettings");
+            var jwtSettings = configuration.GetSection("JwtSettings");
+
+            services.Configure<ApplicationSettings>(applicationSettings);
+            services.Configure<JwtSettings>(jwtSettings);
+
+            services.AddDbContext<TodoAppContext>(
+                options => options.UseMySQL(configuration["ApplicationSettings:MySQLConnectionString"]));
+
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
@@ -45,6 +60,8 @@ namespace ToDoApp.Core
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -56,6 +73,13 @@ namespace ToDoApp.Core
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseMiddleware<JwtMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -66,6 +90,14 @@ namespace ToDoApp.Core
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static IConfigurationRoot InitializeConfigurationSettings()
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddJsonFile("appsettings.json", false)
+                .Build();
         }
     }
 }
