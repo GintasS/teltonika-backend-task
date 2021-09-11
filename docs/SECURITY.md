@@ -2,9 +2,9 @@
 
 ## Reporting a Vulnerability
 
-If there are any vulnerability in **PROJECT_NAME** project, don't hesitate to _report them_.
+If there are any vulnerability in **Teltonika Backend Task** project, don't hesitate to _report them_.
 
-1. Use any of the [private contact addresses](https://github.com/GITHUB_USERNAME/REPO_SLUG#support).
+1. Use any of the [private contact addresses](https://github.com/GintasS/teltonika-backend-task#support).
 2. Describe the vulnerability.
 
 - If you have a fix, explain or attach it.
