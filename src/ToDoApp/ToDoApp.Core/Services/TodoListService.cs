@@ -1,4 +1,5 @@
-﻿using ToDoApp.Core.Interfaces;
+﻿using System.Linq;
+using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
@@ -29,6 +30,11 @@ namespace ToDoApp.Core.Services
                 Id = createdEntity.Id,
                 Name = createdEntity.Name
             };
+        }
+
+        public bool ToDoListExists(int listId)
+        {
+            return _context.ToDoListEntities.FirstOrDefault(x => x.Id == listId) != null;
         }
     }
 }

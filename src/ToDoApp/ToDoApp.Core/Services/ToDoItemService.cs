@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ToDoApp.Core.Interfaces;
+using ToDoApp.Core.Models;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
@@ -19,10 +20,18 @@ namespace ToDoApp.Core.Services
 
         public CreateToDoItemResponse CreateToDoItem(CreateToDoItemRequest createRequest)
         {
+            var existingToDoList = _context.ToDoListEntities.FirstOrDefault(x => x.Id == createRequest.ListId);
+
+            if (existingToDoList == null)
+            {
+                throw new KeyNotFoundException("ToDo List id is not found.");
+            }
+
             var createdItem = _context.ToDoItemEntities.Add(new ToDoItemEntity
             {
                 Name = createRequest.Name,
-                IsDone = createRequest.IsDone
+                IsDone = createRequest.IsDone,
+                ToDoListEntity = existingToDoList
             }).Entity;
 
             _context.SaveChanges();
@@ -34,22 +43,6 @@ namespace ToDoApp.Core.Services
                 Name = createdItem.Name,
                 IsDone = createdItem.IsDone
             };
-        }
-
-        public int DeleteToDoItem(int id)
-        {
-            var itemToDelete = _context.ToDoItemEntities
-                .FirstOrDefault(x => x.Id == id);
-
-            if (itemToDelete == null)
-            {
-                throw new KeyNotFoundException("ToDo Item id is not found.");
-            }
-
-            _context.ToDoItemEntities.Remove(itemToDelete);
-            _context.SaveChanges();
-
-            return itemToDelete.Id;
         }
 
         public IEnumerable<ReadToDoItemResponse> ReadAllToDoItems(int listId)
@@ -70,13 +63,10 @@ namespace ToDoApp.Core.Services
         {
             var existingToDoItem = _context.ToDoItemEntities.FirstOrDefault(x => x.ToDoListEntity.Id == updateRequestModel.ListId && x.Id == updateRequestModel.Id);
 
-            if (existingToDoItem == null)
-            {
-                throw new KeyNotFoundException("ToDo Item is not found.");
-            }
-
             existingToDoItem.Name = updateRequestModel.Name;
             existingToDoItem.IsDone = updateRequestModel.IsDone;
+
+            _context.SaveChanges();
 
             return new UpdateToDoItemResponse
             {
@@ -85,6 +75,19 @@ namespace ToDoApp.Core.Services
                 Name = existingToDoItem.Name,
                 IsDone = existingToDoItem.IsDone
             };
+        }
+
+        public bool DeleteToDoItem(ToDoItemEntity toDoItem)
+        {
+            var entity = _context.ToDoItemEntities.Remove(toDoItem);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public ToDoItemEntity FindToDoItem(int itemId)
+        {
+            return _context.ToDoItemEntities.Find(itemId);
         }
     }
 }
