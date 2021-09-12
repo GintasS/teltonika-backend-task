@@ -18,7 +18,7 @@ namespace ToDoApp.Core.Controllers
             _toDoItemService = toDoItemService;
         }
 
-        [Route("/{listId}/items")]
+        [Route("/{listId:int}/items")]
         [AuthorizeUser]
         [HttpPost]
         public IActionResult CreateToDoItem(int listId, CreateToDoItemRequest createRequestModel)
@@ -35,7 +35,7 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [Route("/{listId}/items")]
+        [Route("/{listId:int}/items")]
         [AuthorizeUser]
         [HttpGet]
         public IActionResult ReadAllToDoItems(int listId)
@@ -50,7 +50,7 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [Route("/{listId}/items/{itemId}")]
+        [Route("/{listId:int}/items/{itemId:int}")]
         [AuthorizeUser]
         [HttpPatch]
         public IActionResult UpdateToDoItem(int listId, int itemId, UpdateToDoItemRequest updateRequestModel)
@@ -75,7 +75,7 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [Route("/{listId}/items/{itemId}")]
+        [Route("/{listId:int}/items/{itemId:int}")]
         [AuthorizeUser]
         [HttpDelete]
         public IActionResult DeleteToDoItem(int listId, int itemId)

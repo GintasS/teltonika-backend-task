@@ -7,7 +7,7 @@ namespace ToDoApp.Core.Controllers
     // TODO:
     // 1. Unit tests.
     // 2. Check all requirements in PDF.
-    // 3. Run Resharper.
+    // 3. Run Resharper.                                                    +
     // 4. Run SonarQube.
     // 5. Try to have all configuration set in appsettings.json
     // 6. Apply all attributes for DB Migrations.
@@ -17,8 +17,8 @@ namespace ToDoApp.Core.Controllers
     // 10. Remove email credentials from appsettings.json .
     // 11. Make endpoints to adhere to Restful standards.
     // 12. Update readme.
-
-
+    // 13. Use either SingleOrDefault or FirstOrDefault, but not both.
+    
     [ApiController]
     [Route("[controller]")]
     public class AdminController : ControllerBase
@@ -34,7 +34,7 @@ namespace ToDoApp.Core.Controllers
             _toDoListService = toDoListService;
         }
 
-        [Route("/users/{userId}/lists/{listId}/items")]
+        [Route("/users/{userId:int}/lists/{listId:int}/items")]
         [AuthorizeAdmin]
         [HttpGet]
         public IActionResult ReadAllToDoItemsForSpecificUser(int userId, int listId)
@@ -62,7 +62,7 @@ namespace ToDoApp.Core.Controllers
             return Ok(toDoItems);
         }
 
-        [Route("/users/{userId}/lists/{listId}/items/{itemId}")]
+        [Route("/users/{userId:int}/lists/{listId:int}/items/{itemId:int}")]
         [AuthorizeAdmin]
         [HttpDelete]
         public IActionResult DeleteTodoItemForSpecificUser(int userId, int listId, int itemId)

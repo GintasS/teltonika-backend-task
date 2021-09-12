@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Core.Controllers
 {
+    [Route("password-recovery/users/{userId:int}")]
     public class PasswordRecoveryController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -23,7 +20,7 @@ namespace ToDoApp.Core.Controllers
         }
 
 
-        [HttpPut("password-recovery/users/{userId}/recovery-link")]
+        [HttpPut("recovery-link")]
         public IActionResult SendPasswordRecoveryLink(int userId)
         {
             var user = _userService.GetUserById(userId);
@@ -39,7 +36,7 @@ namespace ToDoApp.Core.Controllers
             return Ok();
         }
 
-        [HttpPut("password-recovery/users/{userId}/password")]
+        [HttpPut("password")]
         public IActionResult ChangePassword(int userId, PasswordRecoveryRequest model)
         {
             var user = _userService.GetUserById(userId);
