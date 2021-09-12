@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Org.BouncyCastle.Asn1.X509;
+﻿using System.ComponentModel.DataAnnotations;
 using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Database.Entities
