@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ToDoApp.Database.Entities;
+using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Database
 {
@@ -10,20 +11,44 @@ namespace ToDoApp.Database
         {
             context.Database.EnsureCreated();
 
-            if (context.ToDoListEntities.Any() || context.ToDoItemEntities.Any())
+            if (context.ToDoListEntities.Any() || context.ToDoItemEntities.Any() || context.UserEntities.Any())
             {
                 return;
             }
+
+            var users = new List<UserEntity>()
+            {
+                new UserEntity
+                {
+                    Email = "svedgintas@gmail.com",
+                    Password = "123456789012345",
+                    Role = Role.Admin
+                },
+                new UserEntity
+                {
+                    Email = "svedgintas123@gmail.com",
+                    Password = "123456789012345",
+                    Role = Role.User
+                },
+                new UserEntity
+                {
+                    Email = "aaaa@email.com",
+                    Password = "123456789012345",
+                    Role = Role.User
+                },
+            };
 
             var toDoLists = new List<ToDoListEntity>
             {
                 new ToDoListEntity
                 {
-                    Name = "School List"
+                    Name = "School List",
+                    UserEntity = users[0]
                 },
                 new ToDoListEntity
                 {
-                    Name = "Home List"
+                    Name = "Home List",
+                    UserEntity = users[1]
                 }
             };
 
@@ -54,22 +79,6 @@ namespace ToDoApp.Database
                     Name = "Scrub floors.",
                     ToDoListEntity = toDoLists[1]
                 }
-            };
-
-            var users = new List<UserEntity>()
-            {
-                new UserEntity
-                {
-                    Email = "svedgintas@gmail.com",
-                    Password = "123456789012345",
-                    Role = Role.Admin
-                },
-                new UserEntity
-                {
-                    Email = "svedgintas123@gmail.com",
-                    Password = "123456789012345",
-                    Role = Role.User
-                },
             };
 
             foreach (var todoList in toDoLists)
