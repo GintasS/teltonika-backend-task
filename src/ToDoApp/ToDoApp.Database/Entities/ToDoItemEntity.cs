@@ -9,6 +9,7 @@ namespace ToDoApp.Database.Entities
         [Required]
         public string Name { get; set; }
         public bool IsDone { get; set; }
+        [Required]
         public virtual ToDoListEntity ToDoListEntity { get; set; }
     }
 }
