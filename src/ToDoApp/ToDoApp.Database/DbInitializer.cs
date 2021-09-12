@@ -94,6 +94,12 @@ namespace ToDoApp.Database
             foreach (var user in users)
             {
                 context.UserEntities.Add(user);
+                context.PasswordRecoveryEntities.Add(new PasswordRecoveryEntity
+                {
+                    UserId = user.Id,
+                    UserEntity = user,
+                    PasswordRecoveryStatus = PasswordRecoveryStatus.None,
+                });
             }
 
             context.SaveChanges();
