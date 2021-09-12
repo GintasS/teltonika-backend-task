@@ -10,6 +10,7 @@ namespace ToDoApp.Database
         public DbSet<ToDoItemEntity> ToDoItemEntities { get; set; }
         public DbSet<ToDoListEntity> ToDoListEntities { get; set; }
         public DbSet<UserEntity> UserEntities { get; set; }
+        public DbSet<PasswordRecoveryEntity> PasswordRecoveryEntities { get; set; }
 
         public TodoAppContext(DbContextOptions<TodoAppContext> options) : base(options)
         {
@@ -34,6 +35,16 @@ namespace ToDoApp.Database
                             v => (Role)Enum.Parse(typeof(Role), v))
                         .IsUnicode(false)
             );
+
+            modelBuilder.Entity<PasswordRecoveryEntity>(entity =>
+                entity.Property(e => e.PasswordRecoveryStatus)
+                    .HasMaxLength(50)
+                    .HasConversion(
+                        v => v.ToString(),
+                        v => (PasswordRecoveryStatus)Enum.Parse(typeof(PasswordRecoveryStatus), v))
+                    .IsUnicode(false)
+            );
+
         }
     }
 }
