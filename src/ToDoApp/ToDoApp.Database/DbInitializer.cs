@@ -16,7 +16,7 @@ namespace ToDoApp.Database
                 return;
             }
 
-            var users = new List<UserEntity>()
+            var users = new List<UserEntity>
             {
                 new UserEntity
                 {

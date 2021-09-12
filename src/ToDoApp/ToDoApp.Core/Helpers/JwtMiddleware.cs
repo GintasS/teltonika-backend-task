@@ -40,7 +40,7 @@ namespace ToDoApp.Core.Helpers
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters()
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -49,7 +49,7 @@ namespace ToDoApp.Core.Helpers
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
 
-                }, out SecurityToken validatedToken);
+                }, out var validatedToken);
 
                 var jwtToken = (JwtSecurityToken) validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
