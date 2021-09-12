@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Core.Responses
+﻿namespace ToDoApp.Core.Models.Responses
 {
     public class AuthenticateResponse
     {
