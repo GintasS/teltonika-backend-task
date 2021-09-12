@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ToDoApp.Core.Configuration;
 using ToDoApp.Core.Interfaces;
@@ -16,20 +17,22 @@ namespace ToDoApp.Core.Helpers
         private readonly RequestDelegate _next;
         private readonly JwtSettings _jwtSettings;
 
-        public JwtMiddleware(RequestDelegate next, JwtSettings jwtSettings)
+        public JwtMiddleware(RequestDelegate next, IOptionsMonitor<JwtSettings> jwtSettings)
         {
             _next = next;
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtSettings.CurrentValue;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split("").Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
             {
                 AttachUserToContext(context, userService, token);
             }
+
+            await _next(context);
         }
 
         private void AttachUserToContext(HttpContext context, IUserService userService, string token)
