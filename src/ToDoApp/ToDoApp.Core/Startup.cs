@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +11,6 @@ using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Services;
 using ToDoApp.Database;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ToDoApp.Core
@@ -39,12 +37,14 @@ namespace ToDoApp.Core
             services.AddScoped<IToDoItemService, ToDoItemService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPasswordRecoveryService, PasswordRecoveryService>();
             services.AddHttpContextAccessor();
 
-            var applicationSettings = Configuration.GetSection("ApplicationSettings");
+            var emailSettings = Configuration.GetSection("EmailSettings");
             var jwtSettings = Configuration.GetSection("JwtSettings");
 
-            services.Configure<ApplicationSettings>(applicationSettings);
+            services.Configure<EmailSettings>(emailSettings);
             services.Configure<JwtSettings>(jwtSettings);
 
             services.AddDbContext<TodoAppContext>(
