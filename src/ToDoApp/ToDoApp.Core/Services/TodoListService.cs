@@ -16,22 +16,6 @@ namespace ToDoApp.Core.Services
             _context = context;
         }
 
-        public CreateToDoListResponse CreateEmptyTodoList(CreateToDoListRequest requestModel)
-        {
-            var createdEntity = _context.ToDoListEntities.Add(new ToDoListEntity
-            {
-                Name = requestModel.Name
-            }).Entity;
-
-            _context.SaveChanges();
-
-            return new CreateToDoListResponse
-            {
-                Id = createdEntity.Id,
-                Name = createdEntity.Name
-            };
-        }
-
         public bool ToDoListExists(int listId)
         {
             return _context.ToDoListEntities.FirstOrDefault(x => x.Id == listId) != null;
