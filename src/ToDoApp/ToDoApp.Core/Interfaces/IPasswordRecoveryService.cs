@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ToDoApp.Core.Models.Requests;
-using ToDoApp.Database.Entities;
+﻿using ToDoApp.Core.Models.Requests;
 using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Core.Interfaces

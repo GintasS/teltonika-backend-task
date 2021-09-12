@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using ToDoApp.Core.Requests;
-using ToDoApp.Core.Responses;
+using ToDoApp.Core.Models.Requests;
+using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database.Entities;
 
 namespace ToDoApp.Core.Interfaces
