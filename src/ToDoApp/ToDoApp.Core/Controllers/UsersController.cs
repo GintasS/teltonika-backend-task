@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models;
 using ToDoApp.Core.Requests;
@@ -20,7 +21,7 @@ namespace ToDoApp.Core.Controllers
             _userService = userService;
         }
 
-        [HttpPost("/authenticate")]
+        [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
             var response = _userService.Authenticate(model);
@@ -33,6 +34,7 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
+        [AuthorizeUser]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
