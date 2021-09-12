@@ -18,18 +18,10 @@ namespace ToDoApp.Core.Controllers
             _toDoItemService = toDoItemService;
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult CreateEmptyTodoList(CreateToDoListRequest createRequestModel)
-        {
-            var response = _toDoListService.CreateEmptyTodoList(createRequestModel);
-            return Ok(response);
-        }
-
         [Route("/{listId}/items")]
-        [Authorize]
+        [AuthorizeUser]
         [HttpPost]
-        public IActionResult CreateToDoTodoItem(int listId, CreateToDoItemRequest createRequestModel)
+        public IActionResult CreateToDoItem(int listId, CreateToDoItemRequest createRequestModel)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
@@ -44,9 +36,9 @@ namespace ToDoApp.Core.Controllers
         }
 
         [Route("/{listId}/items")]
-        [Authorize]
+        [AuthorizeUser]
         [HttpGet]
-        public IActionResult ReadAllToDoItemsForList(int listId)
+        public IActionResult ReadAllToDoItems(int listId)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
@@ -59,9 +51,9 @@ namespace ToDoApp.Core.Controllers
         }
 
         [Route("/{listId}/items/{itemId}")]
-        [Authorize]
+        [AuthorizeUser]
         [HttpPatch]
-        public IActionResult UpdateToDoTodoItem(int listId, int itemId, UpdateToDoItemRequest updateRequestModel)
+        public IActionResult UpdateToDoItem(int listId, int itemId, UpdateToDoItemRequest updateRequestModel)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
@@ -84,9 +76,9 @@ namespace ToDoApp.Core.Controllers
         }
 
         [Route("/{listId}/items/{itemId}")]
-        [Authorize]
+        [AuthorizeUser]
         [HttpDelete]
-        public IActionResult DeleteToDoTodoItem(int listId, int itemId)
+        public IActionResult DeleteToDoItem(int listId, int itemId)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
