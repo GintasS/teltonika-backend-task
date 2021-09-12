@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.Database.Entities;
+using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Database
 {

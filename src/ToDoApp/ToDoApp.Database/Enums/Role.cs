@@ -1,4 +1,4 @@
-﻿namespace ToDoApp.Database
+﻿namespace ToDoApp.Database.Enums
 {
     public enum Role
     {
