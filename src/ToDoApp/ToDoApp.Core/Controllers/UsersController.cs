@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models;
+using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Requests;
 
 namespace ToDoApp.Core.Controllers

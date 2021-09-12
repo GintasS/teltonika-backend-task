@@ -1,13 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 
 namespace ToDoApp.Core.Controllers
 {
+    // TODO:
+    // 1. Unit tests.
+    // 2. Check all requirements in PDF.
+    // 3. Run Resharper.
+    // 4. Run SonarQube.
+    // 5. Try to have all configuration set in appsettings.json
+    // 6. Apply all attributes for DB Migrations.
+    // 7. In controllers, add Status code documentation.
+    // 8. Clean up Startup.cs
+    // 9. Add comments where needed.
+    // 10. Remove email credentials from appsettings.json .
+    // 11. Make endpoints to adhere to Restful standards.
+    // 12. Update readme.
+
+
     [ApiController]
     [Route("[controller]")]
     public class AdminController : ControllerBase

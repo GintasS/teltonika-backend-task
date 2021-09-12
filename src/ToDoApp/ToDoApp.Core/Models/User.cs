@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using ToDoApp.Database;
 using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Core.Models

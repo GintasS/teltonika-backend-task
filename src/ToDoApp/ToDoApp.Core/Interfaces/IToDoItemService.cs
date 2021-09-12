@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ToDoApp.Core.Models;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database.Entities;

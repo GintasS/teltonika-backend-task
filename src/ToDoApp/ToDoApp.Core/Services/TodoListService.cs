@@ -1,9 +1,6 @@
 ﻿using System.Linq;
 using ToDoApp.Core.Interfaces;
-using ToDoApp.Core.Models.Requests;
-using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
-using ToDoApp.Database.Entities;
 
 namespace ToDoApp.Core.Services
 {

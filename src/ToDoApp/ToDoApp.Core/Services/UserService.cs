@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Filters;
-using ToDoApp.Core.Configuration;
 using ToDoApp.Core.Interfaces;
-using ToDoApp.Core.Models;
+using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Requests;
 using ToDoApp.Core.Responses;
 using ToDoApp.Database;

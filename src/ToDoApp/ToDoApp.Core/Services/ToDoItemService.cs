@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ToDoApp.Core.Interfaces;
-using ToDoApp.Core.Models;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
