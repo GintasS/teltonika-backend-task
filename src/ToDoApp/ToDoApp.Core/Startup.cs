@@ -6,11 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using ToDoApp.Core.Configuration;
 using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Services;
 using ToDoApp.Database;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace ToDoApp.Core
 {
@@ -36,20 +39,45 @@ namespace ToDoApp.Core
             services.AddScoped<IToDoItemService, ToDoItemService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddHttpContextAccessor();
 
-            var configuration = InitializeConfigurationSettings();
-            var applicationSettings = configuration.GetSection("ApplicationSettings");
-            var jwtSettings = configuration.GetSection("JwtSettings");
+            var applicationSettings = Configuration.GetSection("ApplicationSettings");
+            var jwtSettings = Configuration.GetSection("JwtSettings");
 
             services.Configure<ApplicationSettings>(applicationSettings);
             services.Configure<JwtSettings>(jwtSettings);
 
             services.AddDbContext<TodoAppContext>(
-                options => options.UseMySQL(configuration["ApplicationSettings:MySQLConnectionString"]));
-
+                options => options.UseMySQL(Configuration["ApplicationSettings:MySQLConnectionString"]));
 
             // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(setup =>
+                {
+                    // Include 'SecurityScheme' to use JWT Authentication
+                    var jwtSecurityScheme = new OpenApiSecurityScheme
+                    {
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Name = "JWT Authentication",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+                        Reference = new OpenApiReference
+                        {
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                            Type = ReferenceType.SecurityScheme
+                        }
+                    };
+
+                    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+                    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        { jwtSecurityScheme, Array.Empty<string>() }
+                    });
+
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,14 +118,6 @@ namespace ToDoApp.Core
             {
                 endpoints.MapControllers();
             });
-        }
-
-        private static IConfigurationRoot InitializeConfigurationSettings()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
-                .AddJsonFile("appsettings.json", false)
-                .Build();
         }
     }
 }
