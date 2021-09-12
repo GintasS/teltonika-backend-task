@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Database;
-using ToDoApp.Database.Entities;
 using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Core.Services
@@ -13,12 +9,10 @@ namespace ToDoApp.Core.Services
     public class PasswordRecoveryService : IPasswordRecoveryService
     {
         private readonly TodoAppContext _context;
-        private readonly IUserService _userService;
 
-        public PasswordRecoveryService(TodoAppContext context, IUserService userService)
+        public PasswordRecoveryService(TodoAppContext context)
         {
             _context = context;
-            _userService = userService;
         }
 
         public void ChangePassword(int userId, PasswordRecoveryRequest model)
@@ -39,12 +33,7 @@ namespace ToDoApp.Core.Services
         {
             var entity = _context.PasswordRecoveryEntities.FirstOrDefault(x => x.UserEntity.Id == userId);
 
-            if (entity == null)
-            {
-                return PasswordRecoveryStatus.None;
-            }
-
-            return entity.PasswordRecoveryStatus;
+            return entity?.PasswordRecoveryStatus ?? PasswordRecoveryStatus.None;
         }
 
         public void SetUserPasswordRecoveryStatus(int userId, PasswordRecoveryStatus recoveryStatus)
@@ -60,7 +49,5 @@ namespace ToDoApp.Core.Services
 
             _context.SaveChanges();
         }
-
-
     }
 }

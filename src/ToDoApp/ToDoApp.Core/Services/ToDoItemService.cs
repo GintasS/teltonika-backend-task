@@ -62,6 +62,11 @@ namespace ToDoApp.Core.Services
         {
             var existingToDoItem = _context.ToDoItemEntities.FirstOrDefault(x => x.ToDoListEntity.Id == updateRequestModel.ListId && x.Id == updateRequestModel.Id);
 
+            if (existingToDoItem == null)
+            {
+                return new UpdateToDoItemResponse();
+            }
+
             existingToDoItem.Name = updateRequestModel.Name;
             existingToDoItem.IsDone = updateRequestModel.IsDone;
 
@@ -78,7 +83,7 @@ namespace ToDoApp.Core.Services
 
         public bool DeleteToDoItem(ToDoItemEntity toDoItem)
         {
-            var entity = _context.ToDoItemEntities.Remove(toDoItem);
+            _context.ToDoItemEntities.Remove(toDoItem);
             _context.SaveChanges();
 
             return true;

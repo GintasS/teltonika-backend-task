@@ -3,8 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
-using ToDoApp.Core.Requests;
-using ToDoApp.Core.Responses;
+using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
 using ToDoApp.Database.Entities;
 
