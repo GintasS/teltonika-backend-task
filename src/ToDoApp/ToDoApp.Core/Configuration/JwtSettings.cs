@@ -8,6 +8,5 @@ namespace ToDoApp.Core.Configuration
     public class JwtSettings
     {
         public string Secret { get; set; }
-        public DateTime ExpirationTime { get; set; } = 
     }
 }
