@@ -65,9 +65,11 @@ Some of the features of this solution:
 
 Some of the features that are missing in this solution:
 - More unit tests/integration tests.
-- Error Middleware.
+- Error middleware.
 - More robust password changing scheme.
 - Other features.
+- Proper Exception handling middleware.
+- And more.
 
 ## Authors & contributors
 
