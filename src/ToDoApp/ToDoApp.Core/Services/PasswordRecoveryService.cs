@@ -15,28 +15,35 @@ namespace ToDoApp.Core.Services
             _context = context;
         }
 
-        public void ChangePassword(int userId, PasswordRecoveryRequest model)
+        public bool ChangePassword(int userId, PasswordRecoveryRequest model)
         {
-            var user = _context.UserEntities.FirstOrDefault(x => x.Id == userId);
+            var user = _context.UserEntities.SingleOrDefault(x => x.Id == userId);
+            if (user == null)
+            {
+                return false;
+            }
 
             user.Password = model.NewPassword;
-
             _context.SaveChanges();
+
+            return true;
         }
 
         public PasswordRecoveryStatus GetUserPasswordRecoveryStatus(int userId)
         {
-            var entity = _context.PasswordRecoveryEntities.FirstOrDefault(x => x.UserEntity.Id == userId);
-
+            var entity = _context.PasswordRecoveryEntities.SingleOrDefault(x => x.UserEntity.Id == userId);
             return entity?.PasswordRecoveryStatus ?? PasswordRecoveryStatus.None;
         }
 
         public void SetUserPasswordRecoveryStatus(int userId, PasswordRecoveryStatus recoveryStatus)
         {
-            var entity = _context.PasswordRecoveryEntities.FirstOrDefault(x => x.UserEntity.Id == userId);
-
-            entity.PasswordRecoveryStatus = recoveryStatus; 
-
+            var entity = _context.PasswordRecoveryEntities.SingleOrDefault(x => x.UserEntity.Id == userId);
+            if (entity == null)
+            {
+                return;
+            }
+            
+            entity.PasswordRecoveryStatus = recoveryStatus;
             _context.SaveChanges();
         }
     }

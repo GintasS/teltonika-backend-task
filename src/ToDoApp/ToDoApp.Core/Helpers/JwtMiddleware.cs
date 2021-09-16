@@ -24,7 +24,7 @@ namespace ToDoApp.Core.Helpers
 
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            var token = context.Request.Headers[Constants.Jwt.Authorization].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers[Constants.Jwt.Authorization].SingleOrDefault()?.Split(" ").Last();
 
             if (token != null)
             {

@@ -20,11 +20,14 @@ namespace ToDoApp.Core.Services
 
         public CreateToDoItemResponse CreateToDoItem(CreateToDoItemRequest createRequest)
         {
-            var existingToDoList = _context.ToDoListEntities.FirstOrDefault(x => x.Id == createRequest.ListId);
+            var existingToDoList = _context.ToDoListEntities.SingleOrDefault(x => x.Id == createRequest.ListId);
+            if (existingToDoList == null)
+            {
+                return null;
+            }
 
             var entityToAdd = createRequest.MapToToDoItemEntity(existingToDoList);
             var createdDbEntity = _context.ToDoItemEntities.Add(entityToAdd).Entity;
-
             _context.SaveChanges();
 
             return createdDbEntity.MapToCreateToDoItemResponse();
@@ -41,11 +44,14 @@ namespace ToDoApp.Core.Services
 
         public UpdateToDoItemResponse UpdateToDoItem(UpdateToDoItemRequest updateRequestModel)
         {
-            var existingToDoItem = _context.ToDoItemEntities.FirstOrDefault(x => x.ToDoListEntity.Id == updateRequestModel.ListId && x.Id == updateRequestModel.Id);
+            var existingToDoItem = _context.ToDoItemEntities.SingleOrDefault(x => x.ToDoListEntity.Id == updateRequestModel.ListId && x.Id == updateRequestModel.Id);
+            if (existingToDoItem == null)
+            {
+                return null;
+            }
 
             existingToDoItem.Name = updateRequestModel.Name;
             existingToDoItem.IsDone = updateRequestModel.IsDone;
-
             _context.SaveChanges();
 
             return existingToDoItem.MapToUpdateToDoItemResponse();
@@ -54,9 +60,9 @@ namespace ToDoApp.Core.Services
         public bool DeleteToDoItem(ToDoItemEntity toDoItem)
         {
             _context.ToDoItemEntities.Remove(toDoItem);
-            _context.SaveChanges();
+            var deletionStatus =_context.SaveChanges();
 
-            return true;
+            return deletionStatus == 1;
         }
 
         public ToDoItemEntity FindToDoItem(int itemId)

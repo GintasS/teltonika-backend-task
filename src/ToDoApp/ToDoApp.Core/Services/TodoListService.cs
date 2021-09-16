@@ -15,7 +15,7 @@ namespace ToDoApp.Core.Services
 
         public bool ToDoListExists(int listId)
         {
-            return _context.ToDoListEntities.FirstOrDefault(x => x.Id == listId) != null;
+            return _context.ToDoListEntities.SingleOrDefault(x => x.Id == listId) != null;
         }
     }
 }

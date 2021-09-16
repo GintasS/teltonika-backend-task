@@ -27,10 +27,16 @@ namespace ToDoApp.Core.Services
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
             var user = _context.UserEntities.SingleOrDefault(x =>
-                x.Email == model.Email && x.Password == model.Password);
+                x.Email == model.Email && 
+                x.Password == model.Password
+            );
+
+            if (user == null)
+            {
+                return null;
+            }
 
             var token = _jwtService.GenerateToken(user);
-
             return user.MapToAuthenticateResponse(token);
         }
 
@@ -47,14 +53,12 @@ namespace ToDoApp.Core.Services
         public bool AuthenticatedUserHasSpecificList(int listId)
         {
             var user = (UserEntity)_httpContextAccessor.HttpContext.Items[Constants.Jwt.User];
-
             return UserHasSpecificList(user.Id, listId);
         }
 
         public bool UserHasSpecificList(int userId, int listId)
         {
-            var list = _context.ToDoListEntities.FirstOrDefault(x => x.Id == listId);
-
+            var list = _context.ToDoListEntities.SingleOrDefault(x => x.Id == listId);
             if (list == null)
             {
                 return false;
