@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Core.Configuration;
 using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Interfaces;
 using ToDoApp.Core.Models.Requests;
+using ToDoApp.Core.Models.Responses;
 
 namespace ToDoApp.Core.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("todolists")]
     public class ToDoListsController : ControllerBase
     {
         private readonly IToDoListService _toDoListService;
@@ -18,15 +20,17 @@ namespace ToDoApp.Core.Controllers
             _toDoItemService = toDoItemService;
         }
 
-        [Route("/{listId:int}/items")]
         [AuthorizeUser]
+        [ProducesResponseType(typeof(CreateToDoItemResponse), 200)]
+        [ProducesResponseType(404)]
+        [Route("{listId:int}/items")]
         [HttpPost]
         public IActionResult CreateToDoItem(int listId, CreateToDoItemRequest createRequestModel)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
             {
-                return NotFound("List was not found.");
+                return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
             createRequestModel.ListId = listId;
@@ -35,37 +39,40 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [Route("/{listId:int}/items")]
         [AuthorizeUser]
+        [ProducesResponseType(typeof(ReadToDoItemResponse), 200)]
+        [ProducesResponseType(404)]
+        [Route("{listId:int}/items")]
         [HttpGet]
         public IActionResult ReadAllToDoItems(int listId)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
             {
-                return NotFound("List was not found.");
+                return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
             var response = _toDoItemService.ReadAllToDoItems(listId);
             return Ok(response);
         }
 
-        [Route("/{listId:int}/items/{itemId:int}")]
         [AuthorizeUser]
+        [ProducesResponseType(typeof(UpdateToDoItemResponse), 200)]
+        [ProducesResponseType(404)]
+        [Route("{listId:int}/items/{itemId:int}")]
         [HttpPatch]
         public IActionResult UpdateToDoItem(int listId, int itemId, UpdateToDoItemRequest updateRequestModel)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
             {
-                return NotFound("List was not found.");
+                return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
-            var todoItemExists = _toDoItemService.FindToDoItem(itemId);
-
-            if (todoItemExists == null)
+            var todoItem = _toDoItemService.FindToDoItem(itemId);
+            if (todoItem == null)
             {
-                return NotFound("List Item was not found.");
+                return NotFound(Constants.ErrorMessages.ToDoItemWithItemIdDoesNotExist);
             }
 
             updateRequestModel.ListId = listId;
@@ -75,21 +82,23 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [Route("/{listId:int}/items/{itemId:int}")]
         [AuthorizeUser]
+        [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(404)]
+        [Route("{listId:int}/items/{itemId:int}")]
         [HttpDelete]
         public IActionResult DeleteToDoItem(int listId, int itemId)
         {
             var toDoListExists = _toDoListService.ToDoListExists(listId);
             if (toDoListExists == false)
             {
-                return NotFound("List was not found.");
+                return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
             var todoItem = _toDoItemService.FindToDoItem(itemId);
             if (todoItem == null)
             {
-                return NotFound("List Item was not found.");
+                return NotFound(Constants.ErrorMessages.ToDoItemWithItemIdDoesNotExist);
             }
 
             var response = _toDoItemService.DeleteToDoItem(todoItem);
