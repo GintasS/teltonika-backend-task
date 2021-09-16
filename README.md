@@ -33,6 +33,7 @@
 
 - [About](#about)
 - [Features](#features)
+- [Missing Features](#features) 
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
@@ -59,6 +60,16 @@ Some of the features of this solution:
 - RESTful API.
 - Constants file.
 - And more features!
+
+## Missing Features
+
+Some of the features that are missing in this solution:
+- More unit tests/integration tests.
+- Error middleware.
+- More robust password changing scheme.
+- Other features.
+- Proper Exception handling middleware.
+- And more.
 
 ## Authors & contributors
 
