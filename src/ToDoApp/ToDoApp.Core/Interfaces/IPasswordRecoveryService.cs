@@ -7,6 +7,6 @@ namespace ToDoApp.Core.Interfaces
     {
         public PasswordRecoveryStatus GetUserPasswordRecoveryStatus(int userId);
         public void SetUserPasswordRecoveryStatus(int userId, PasswordRecoveryStatus recoveryStatus);
-        public void ChangePassword(int userId, PasswordRecoveryRequest model);
+        public bool ChangePassword(int userId, PasswordRecoveryRequest model);
     }
 }
