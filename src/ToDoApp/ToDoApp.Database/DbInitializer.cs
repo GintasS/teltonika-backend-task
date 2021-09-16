@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using ToDoApp.Database.Entities;
 using ToDoApp.Database.Enums;
 
@@ -10,11 +9,6 @@ namespace ToDoApp.Database
         public static void Initialize(TodoAppContext context)
         {
             context.Database.EnsureCreated();
-
-            if (context.ToDoListEntities.Any() || context.ToDoItemEntities.Any() || context.UserEntities.Any())
-            {
-                return;
-            }
 
             var users = new List<UserEntity>
             {
@@ -35,7 +29,7 @@ namespace ToDoApp.Database
                     Email = "aaaa@email.com",
                     Password = "123456789012345",
                     Role = Role.User
-                },
+                }
             };
 
             var toDoLists = new List<ToDoListEntity>
@@ -98,7 +92,7 @@ namespace ToDoApp.Database
                 {
                     UserId = user.Id,
                     UserEntity = user,
-                    PasswordRecoveryStatus = PasswordRecoveryStatus.None,
+                    PasswordRecoveryStatus = PasswordRecoveryStatus.None
                 });
             }
 

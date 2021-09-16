@@ -2,6 +2,6 @@
 {
     public enum PasswordRecoveryStatus
     {
-        None = 0, Requested, Recovered
+        None = 0, Requested
     }
 }
