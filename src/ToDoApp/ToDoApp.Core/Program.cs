@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ToDoApp.Core.Configuration;
 using ToDoApp.Database;
 
 namespace ToDoApp.Core
@@ -31,7 +32,7 @@ namespace ToDoApp.Core
             catch (Exception ex)
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "An error occurred creating the DB.");
+                logger.LogError(ex, Constants.Exception.DBInitalizationFailed);
             }
         }
 

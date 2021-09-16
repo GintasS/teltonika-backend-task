@@ -24,7 +24,7 @@ namespace ToDoApp.Core.Helpers
 
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers[Constants.Jwt.Authorization].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
             {
@@ -46,21 +46,21 @@ namespace ToDoApp.Core.Helpers
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    // Set ClockSkew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later).
                     ClockSkew = TimeSpan.Zero
 
                 }, out var validatedToken);
 
                 var jwtToken = (JwtSecurityToken) validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == Constants.Jwt.UserId).Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetUserById(userId);
+                context.Items[Constants.Jwt.User] = userService.GetUserById(userId);
             }
             catch
             {
-                // do nothing if jwt validation fails
-                // user is not attached to context so request won't have access to secure routes
+                // Do nothing if jwt validation fails.
+                // User is not attached to context so request won't have access to secure routes.
             }
         }
     }
