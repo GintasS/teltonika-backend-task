@@ -18,9 +18,9 @@ namespace ToDoApp.Core.Controllers
     // 9. Add comments where needed.                                                                +
     // 10. Remove email credentials from appsettings.json .                                         +
     // 11. Make endpoints to adhere to Restful standards.                                           +
-    // 12. Update readme.
-    // 13. Use either SingleOrDefault or FirstOrDefault, but not both.
-    // 14. Now every time you launch a program, it will recreate all the data in DB.
+    // 12. Update readme.                                                                           +
+    // 13. Use either SingleOrDefault or FirstOrDefault, but not both.                              +
+    // 14. Now every time you launch a program, it will recreate all the data in DB.                +
     //     Can this cause errors for us?
     // 15. Run all possible scenarios to catch bugs manually.
     // 16. Remove Unused NuGet packages.                                                            +
@@ -56,8 +56,9 @@ namespace ToDoApp.Core.Controllers
 
         [AuthorizeAdmin]
         [ProducesResponseType(typeof(IEnumerable<ToDoItem>), 200)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [Route("{userId:int}/lists/{listId:int}/items")]
         [HttpGet]
         public IActionResult ReadAllToDoItemsForSpecificUser(int userId, int listId)
@@ -86,6 +87,7 @@ namespace ToDoApp.Core.Controllers
 
         [AuthorizeAdmin]
         [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [ProducesResponseType(403)]
         [Route("{userId:int}/lists/{listId:int}/items/{itemId:int}")]

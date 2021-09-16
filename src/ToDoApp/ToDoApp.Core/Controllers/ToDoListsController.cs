@@ -13,15 +13,19 @@ namespace ToDoApp.Core.Controllers
     {
         private readonly IToDoListService _toDoListService;
         private readonly IToDoItemService _toDoItemService;
+        private readonly IUserService _userService;
 
-        public ToDoListsController(IToDoListService toDoListService, IToDoItemService toDoItemService)
+        public ToDoListsController(IToDoListService toDoListService, IToDoItemService toDoItemService, IUserService userService)
         {
             _toDoListService = toDoListService;
             _toDoItemService = toDoItemService;
+            _userService = userService;
         }
 
         [AuthorizeUser]
         [ProducesResponseType(typeof(CreateToDoItemResponse), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [Route("{listId:int}/items")]
         [HttpPost]
@@ -33,6 +37,12 @@ namespace ToDoApp.Core.Controllers
                 return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
+            var listBelongsToAuthenticatedUser = _userService.AuthenticatedUserHasSpecificList(listId);
+            if (listBelongsToAuthenticatedUser == false)
+            {
+                return Forbid(Constants.ErrorMessages.UserDoesNotOwnSpecificList);
+            }
+
             createRequestModel.ListId = listId;
 
             var response = _toDoItemService.CreateToDoItem(createRequestModel);
@@ -41,6 +51,8 @@ namespace ToDoApp.Core.Controllers
 
         [AuthorizeUser]
         [ProducesResponseType(typeof(ReadToDoItemResponse), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [Route("{listId:int}/items")]
         [HttpGet]
@@ -52,12 +64,20 @@ namespace ToDoApp.Core.Controllers
                 return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
+            var listBelongsToAuthenticatedUser = _userService.AuthenticatedUserHasSpecificList(listId);
+            if (listBelongsToAuthenticatedUser == false)
+            {
+                return Forbid(Constants.ErrorMessages.UserDoesNotOwnSpecificList);
+            }
+
             var response = _toDoItemService.ReadAllToDoItems(listId);
             return Ok(response);
         }
 
         [AuthorizeUser]
         [ProducesResponseType(typeof(UpdateToDoItemResponse), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [Route("{listId:int}/items/{itemId:int}")]
         [HttpPatch]
@@ -67,6 +87,12 @@ namespace ToDoApp.Core.Controllers
             if (toDoListExists == false)
             {
                 return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
+            }
+
+            var listBelongsToAuthenticatedUser = _userService.AuthenticatedUserHasSpecificList(listId);
+            if (listBelongsToAuthenticatedUser == false)
+            {
+                return Forbid(Constants.ErrorMessages.UserDoesNotOwnSpecificList);
             }
 
             var todoItem = _toDoItemService.FindToDoItem(itemId);
@@ -84,6 +110,8 @@ namespace ToDoApp.Core.Controllers
 
         [AuthorizeUser]
         [ProducesResponseType(typeof(bool), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
         [ProducesResponseType(404)]
         [Route("{listId:int}/items/{itemId:int}")]
         [HttpDelete]
@@ -95,14 +123,20 @@ namespace ToDoApp.Core.Controllers
                 return NotFound(Constants.ErrorMessages.ListWithIdDoesNotExist);
             }
 
+            var listBelongsToAuthenticatedUser = _userService.AuthenticatedUserHasSpecificList(listId);
+            if (listBelongsToAuthenticatedUser == false)
+            {
+                return Forbid(Constants.ErrorMessages.UserDoesNotOwnSpecificList);
+            }
+
             var todoItem = _toDoItemService.FindToDoItem(itemId);
             if (todoItem == null)
             {
                 return NotFound(Constants.ErrorMessages.ToDoItemWithItemIdDoesNotExist);
             }
 
-            var response = _toDoItemService.DeleteToDoItem(todoItem);
-            return Ok(response);
+            var isSuccess = _toDoItemService.DeleteToDoItem(todoItem);
+            return Ok(isSuccess);
         }
     }
 }

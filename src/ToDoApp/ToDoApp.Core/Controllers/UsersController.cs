@@ -38,8 +38,9 @@ namespace ToDoApp.Core.Controllers
             return Ok(response);
         }
 
-        [AuthorizeUser]
+        [AuthorizeAdmin]
         [ProducesResponseType(typeof(IEnumerable<User>), 200)]
+        [ProducesResponseType(401)]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
