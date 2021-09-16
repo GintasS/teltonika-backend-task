@@ -45,6 +45,9 @@ namespace ToDoApp.Database
                     .IsUnicode(false)
             );
 
+            modelBuilder.Entity<UserEntity>()
+                .HasIndex(x => new {x.Email})
+                .IsUnique();
         }
     }
 }
