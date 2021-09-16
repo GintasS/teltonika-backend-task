@@ -1,8 +1,6 @@
 using FluentAssertions;
 using ToDoApp.Core.Configuration;
-using ToDoApp.Core.Helpers;
 using ToDoApp.Core.Mappings;
-using ToDoApp.Core.Models;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Database.Entities;
 using ToDoApp.Database.Enums;
