@@ -6,14 +6,14 @@ using ToDoApp.Database.Enums;
 
 namespace ToDoApp.Core.Controllers
 {
-    [Route("account")]
-    public class AccountController : ControllerBase
+    [Route("accounts")]
+    public class AccountsController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly IPasswordRecoveryService _passwordRecoveryService;
 
-        public AccountController(IUserService userService, IEmailService emailService, IPasswordRecoveryService passwordRecoveryService)
+        public AccountsController(IUserService userService, IEmailService emailService, IPasswordRecoveryService passwordRecoveryService)
         {
             _userService = userService;
             _emailService = emailService;
@@ -21,8 +21,8 @@ namespace ToDoApp.Core.Controllers
         }
 
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(404)]
         [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
         [Route("password-recovery/{userId:int}")]
         [HttpPut]
         public IActionResult SendPasswordRecoveryLink(int userId)
@@ -44,8 +44,8 @@ namespace ToDoApp.Core.Controllers
         }
 
         [ProducesResponseType(typeof(bool), 200)]
-        [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         [Route("password/{userId:int}")]
         [HttpPut]
         public IActionResult ChangePassword(int userId, PasswordRecoveryRequest model)
@@ -63,9 +63,9 @@ namespace ToDoApp.Core.Controllers
             }
 
             _passwordRecoveryService.SetUserPasswordRecoveryStatus(userId, PasswordRecoveryStatus.None);
-            _passwordRecoveryService.ChangePassword(userId, model);
+            var isPasswordChanged = _passwordRecoveryService.ChangePassword(userId, model);
 
-            return Ok();
+            return Ok(isPasswordChanged);
         }
     }
 }
