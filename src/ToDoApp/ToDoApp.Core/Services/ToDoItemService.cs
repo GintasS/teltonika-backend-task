@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ToDoApp.Core.Interfaces;
+using ToDoApp.Core.Mappings;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
@@ -21,38 +22,18 @@ namespace ToDoApp.Core.Services
         {
             var existingToDoList = _context.ToDoListEntities.FirstOrDefault(x => x.Id == createRequest.ListId);
 
-            if (existingToDoList == null)
-            {
-                throw new KeyNotFoundException("ToDo List id is not found.");
-            }
-
-            var createdItem = _context.ToDoItemEntities.Add(new ToDoItemEntity
-            {
-                Name = createRequest.Name,
-                IsDone = createRequest.IsDone,
-                ToDoListEntity = existingToDoList
-            }).Entity;
+            var entityToAdd = createRequest.MapToToDoItemEntity(existingToDoList);
+            var createdDbEntity = _context.ToDoItemEntities.Add(entityToAdd).Entity;
 
             _context.SaveChanges();
 
-            return new CreateToDoItemResponse
-            {
-                Id = createdItem.Id,
-                ListId = createdItem.ToDoListEntity.Id,
-                Name = createdItem.Name,
-                IsDone = createdItem.IsDone
-            };
+            return createdDbEntity.MapToCreateToDoItemResponse();
         }
 
         public IEnumerable<ReadToDoItemResponse> ReadAllToDoItems(int listId)
         {
             var toDoItems = _context.ToDoItemEntities.Where(x => x.ToDoListEntity.Id == listId)
-                .Select(x => new ReadToDoItemResponse
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    IsDone = x.IsDone
-                })
+                .Select(x => x.MapToReadToDoItemResponse())
                 .ToList();
 
             return toDoItems;
@@ -62,23 +43,12 @@ namespace ToDoApp.Core.Services
         {
             var existingToDoItem = _context.ToDoItemEntities.FirstOrDefault(x => x.ToDoListEntity.Id == updateRequestModel.ListId && x.Id == updateRequestModel.Id);
 
-            if (existingToDoItem == null)
-            {
-                return new UpdateToDoItemResponse();
-            }
-
             existingToDoItem.Name = updateRequestModel.Name;
             existingToDoItem.IsDone = updateRequestModel.IsDone;
 
             _context.SaveChanges();
 
-            return new UpdateToDoItemResponse
-            {
-                ListId = existingToDoItem.ToDoListEntity.Id,
-                Id = existingToDoItem.Id,
-                Name = existingToDoItem.Name,
-                IsDone = existingToDoItem.IsDone
-            };
+            return existingToDoItem.MapToUpdateToDoItemResponse();
         }
 
         public bool DeleteToDoItem(ToDoItemEntity toDoItem)

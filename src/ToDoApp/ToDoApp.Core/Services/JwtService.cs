@@ -25,9 +25,9 @@ namespace ToDoApp.Core.Services
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] {new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Subject = new ClaimsIdentity(new[] {new Claim(_jwtSettings.TokenGeneration.ClaimType, user.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(_jwtSettings.TokenGeneration.DaysUntilExpiration),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), _jwtSettings.TokenGeneration.HashingAlgorithm)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

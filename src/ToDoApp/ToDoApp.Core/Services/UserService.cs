@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
+using ToDoApp.Core.Configuration;
 using ToDoApp.Core.Interfaces;
+using ToDoApp.Core.Mappings;
 using ToDoApp.Core.Models.Requests;
 using ToDoApp.Core.Models.Responses;
 using ToDoApp.Database;
@@ -27,21 +29,9 @@ namespace ToDoApp.Core.Services
             var user = _context.UserEntities.SingleOrDefault(x =>
                 x.Email == model.Email && x.Password == model.Password);
 
-            if (user == null)
-            {
-                return null;
-            }
-
             var token = _jwtService.GenerateToken(user);
 
-            return new AuthenticateResponse
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Token = token,
-                Email = user.Email
-            };
+            return user.MapToAuthenticateResponse(token);
         }
 
         public IEnumerable<UserEntity> GetAllUsers()
@@ -56,7 +46,7 @@ namespace ToDoApp.Core.Services
 
         public bool AuthenticatedUserHasSpecificList(int listId)
         {
-            var user = (UserEntity)_httpContextAccessor.HttpContext.Items["User"];
+            var user = (UserEntity)_httpContextAccessor.HttpContext.Items[Constants.Jwt.User];
 
             return UserHasSpecificList(user.Id, listId);
         }

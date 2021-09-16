@@ -19,11 +19,6 @@ namespace ToDoApp.Core.Services
         {
             var user = _context.UserEntities.FirstOrDefault(x => x.Id == userId);
 
-            if (user == null)
-            {
-                return;
-            }
-
             user.Password = model.NewPassword;
 
             _context.SaveChanges();
@@ -39,11 +34,6 @@ namespace ToDoApp.Core.Services
         public void SetUserPasswordRecoveryStatus(int userId, PasswordRecoveryStatus recoveryStatus)
         {
             var entity = _context.PasswordRecoveryEntities.FirstOrDefault(x => x.UserEntity.Id == userId);
-
-            if (entity == null)
-            {
-                return;
-            }
 
             entity.PasswordRecoveryStatus = recoveryStatus; 
 
