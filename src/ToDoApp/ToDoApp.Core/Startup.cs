@@ -31,8 +31,15 @@ namespace ToDoApp.Core
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
-
             services.AddCors();
+
+            RegisterServices(services);
+            ConfigureDatabase(services);
+            ConfigureJwt(services);
+        }
+
+        private void RegisterServices(IServiceCollection services)
+        {
             services.AddScoped<IToDoListService, ToDoListService>();
             services.AddScoped<IToDoItemService, ToDoItemService>();
             services.AddScoped<IUserService, UserService>();
@@ -46,38 +53,44 @@ namespace ToDoApp.Core
 
             services.Configure<EmailSettings>(emailSettings);
             services.Configure<JwtSettings>(jwtSettings);
+        }
 
+        private void ConfigureDatabase(IServiceCollection services)
+        {
             services.AddDbContext<TodoAppContext>(
                 options => options.UseMySQL(Configuration["ApplicationSettings:MySQLConnectionString"]));
+        }
 
+        private void ConfigureJwt(IServiceCollection services)
+        {
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(setup =>
+            {
+                // Include 'SecurityScheme' to use JWT Authentication
+                var jwtSecurityScheme = new OpenApiSecurityScheme
                 {
-                    // Include 'SecurityScheme' to use JWT Authentication
-                    var jwtSecurityScheme = new OpenApiSecurityScheme
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "JWT Authentication",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+                    Reference = new OpenApiReference
                     {
-                        Scheme = "bearer",
-                        BearerFormat = "JWT",
-                        Name = "JWT Authentication",
-                        In = ParameterLocation.Header,
-                        Type = SecuritySchemeType.Http,
-                        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
 
-                        Reference = new OpenApiReference
-                        {
-                            Id = JwtBearerDefaults.AuthenticationScheme,
-                            Type = ReferenceType.SecurityScheme
-                        }
-                    };
+                setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
-                    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
-                    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        { jwtSecurityScheme, Array.Empty<string>() }
-                    });
-
+                setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { jwtSecurityScheme, Array.Empty<string>() }
                 });
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -106,13 +119,11 @@ namespace ToDoApp.Core
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
+            // Configure Jwt.
             app.UseMiddleware<JwtMiddleware>();
+            app.UseAuthorization();
 
             app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
